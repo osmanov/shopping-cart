@@ -1,0 +1,17 @@
+[
+  { "id": 1, "title": "Ананасы кусочками", "price": 139, "quantity": 1 },
+  { "id": 2, "title": "Креветки королевские", "price": 429, "quantity": 8 },
+  {
+    "id": 3,
+    "title": "Соус устричный Blue Dragon",
+    "price": 254,
+    "quantity": 5
+  },
+  {
+    "id": 4,
+    "title": "Сухарики ржаные Три корочки",
+    "price": 18,
+    "quantity": 3
+  },
+  { "id": 5, "title": "Хлебцы Fazer", "price": 53, "quantity": 2 }
+]
