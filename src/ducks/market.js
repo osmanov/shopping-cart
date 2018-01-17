@@ -9,6 +9,7 @@ const prefix = `${appName}/${moduleName}`
 export const FETCH_ITEMS_REQUEST = `${prefix}/FETCH_ITEMS_REQUEST`
 export const FETCH_ITEMS_SUCCESS = `${prefix}/FETCH_ITEMS_SUCCESS`
 export const FETCH_ITEMS_ERROR = `${prefix}/FETCH_ITEMS_ERROR`
+export const ADD_TO_CART = `${prefix}/ADD_TO_CART`
 
 const initialState = {
   loading: false,
@@ -32,8 +33,24 @@ export default function reducer(state = initialState, action) {
       return { loading: false, items: [...payload], error: null }
     case FETCH_ITEMS_ERROR:
       return { ...state, loading: false, error }
+    case ADD_TO_CART:
+      return {
+        ...state,
+        items: state.items.map(item => {
+          if (item.id === payload.id) {
+            return { ...item, quantity: item.quantity - 1 }
+          }
+          return item
+        })
+      }
     default:
       return state
+  }
+}
+export function addToCart(item) {
+  return {
+    type: ADD_TO_CART,
+    payload: item
   }
 }
 export function fetchItems() {
@@ -59,7 +76,6 @@ export const fetchItemsSaga = function*(action) {
     }
   }
 }
-
 export const saga = function*() {
   yield all([fetchItemsSaga()])
 }
