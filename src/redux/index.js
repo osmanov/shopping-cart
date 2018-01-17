@@ -4,7 +4,7 @@ import logger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 import reducer from './reducer'
 import rootSaga from './saga'
-import { loadState, saveState } from '../utils/localStorage'
+import { loadState, saveState } from './localStorage'
 
 const sagaMiddleware = createSagaMiddleware()
 const enhancer = applyMiddleware(sagaMiddleware, logger)

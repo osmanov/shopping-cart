@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import MarketContainer from '../Market'
 import CartContainer from '../Cart'
 import { itemsListSelector, moduleName, fetchItems } from '../../ducks/shop'
-import { removeState } from '../../utils/localStorage'
+import { removeState } from '../../redux/localStorage'
 
 class Root extends Component {
   static propTypes = {
