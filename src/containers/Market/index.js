@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import shortid from 'shortid'
 import { connect } from 'react-redux'
 import { itemsListSelector, fetchItems, moduleName } from '../../ducks/market'
 class Market extends Component {
@@ -11,7 +12,11 @@ class Market extends Component {
     if (loading) {
       return <h1>Loading...</h1>
     }
-    return <ul>{items.map(item => <li key={item.id}>{item.title}</li>)}</ul>
+    return (
+      <ul>
+        {items.map(item => <li key={shortid.generate()}>{item.title}</li>)}
+      </ul>
+    )
   }
 }
 export default connect(
