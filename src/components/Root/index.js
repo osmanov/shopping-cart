@@ -1,11 +1,10 @@
 import React from 'react'
-import MarketStallContainer from '../../containers/MarketStall'
+import MarketContainer from '../../containers/Market'
 import CartContainer from '../../containers/Cart'
 
 const Root = () => (
-  //TODO to component
   <div>
-    <MarketStallContainer />
+    <MarketContainer />
     <hr />
     <CartContainer />
   </div>
