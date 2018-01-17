@@ -32,8 +32,15 @@ class Market extends Component {
     return (
       <ul>
         {items.map(item => (
-          <li key={shortid.generate()} onClick={this.handleOnClickRow(item)}>
+          <li key={shortid.generate()}>
             {item.title} {item.quantity}
+            <button
+              type="button"
+              disabled={item.quantity === 0}
+              onClick={this.handleOnClickRow(item)}
+            >
+              добавить в корзину
+            </button>
           </li>
         ))}
       </ul>
