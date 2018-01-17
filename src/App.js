@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Root from './components/Root'
+import Root from './containers/Root'
 import store from './redux'
 import { Provider } from 'react-redux'
 
