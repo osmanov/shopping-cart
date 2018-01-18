@@ -8,10 +8,8 @@ import { mergeItemsByIds } from '../utils'
 export const moduleName = 'cart'
 const prefix = `${appName}/${moduleName}`
 
-export const CREATE_ITEM = `${prefix}/CREATE_ITEM`
 export const ADD_ITEM = `${prefix}/ADD_ITEM`
 export const REMOVE_ITEM = `${prefix}/REMOVE_ITEM`
-export const DESTROY_ITEM = `${prefix}/DESTROY_ITEM`
 
 const initialState = {
   items: []
@@ -21,11 +19,24 @@ export const stateSelector = state => state[moduleName]
 export const itemsListSelector = createSelector(stateSelector, state => {
   const { items } = state
   return items.map(item => {
-    const { price } = item
-    const description = isArray(price)
-      ? `${price.length}x${price[0]}=${price.length * price[0]}`
-      : `1x${price}=${price}`
-    return { item, description }
+    const { price, quantity } = item
+
+    const isMultiPrice = isArray(price)
+
+    const itemPrice = isMultiPrice ? price[0] : price
+    const description = isMultiPrice
+      ? `${price.length}x${itemPrice}=${price.length * itemPrice}`
+      : `1x${itemPrice}=${itemPrice}`
+
+    const disabledStatus = {
+      add: isMultiPrice ? [...price].length === quantity : 1 === quantity,
+      remove: false
+    }
+    return {
+      item: { ...item, price: itemPrice },
+      description,
+      disabledStatus
+    }
   })
 })
 
