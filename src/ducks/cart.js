@@ -24,21 +24,30 @@ export const itemsListSelector = createSelector(stateSelector, state => {
     const isMultiPrice = isArray(price)
 
     const itemPrice = isMultiPrice ? price[0] : price
-    const description = isMultiPrice
-      ? `${price.length}x${itemPrice}=${price.length * itemPrice}`
-      : `1x${itemPrice}=${itemPrice}`
+    const itemQuantity = isMultiPrice ? price.length : [price].length
 
     const disabledStatus = {
-      add: isMultiPrice ? [...price].length === quantity : 1 === quantity,
+      add: itemQuantity === quantity,
       remove: false
     }
     return {
       item: { ...item, price: itemPrice },
-      description,
+      totalPrice: itemQuantity * itemPrice,
+      quantity: itemQuantity,
       disabledStatus
     }
   })
 })
+
+export const totalSelector = createSelector(itemsListSelector, itemsList =>
+  itemsList.reduce(
+    (res, current) => ({
+      price: res.price + current.totalPrice,
+      quantity: res.quantity + current.quantity
+    }),
+    { price: 0, quantity: 0 }
+  )
+)
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action
