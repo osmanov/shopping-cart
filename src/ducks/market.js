@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { all, call, put, take } from 'redux-saga/effects'
+import sortBy from 'lodash.sortby'
+import { all, call, put, take, takeEvery } from 'redux-saga/effects'
 import { FETCH_ITEMS_SUCCESS } from './shop'
 import { appName } from '../config'
 
@@ -8,9 +9,11 @@ const prefix = `${appName}/${moduleName}`
 
 export const ADD_TO_CART = `${prefix}/ADD_TO_CART`
 export const REMOVE_FROM_CART = `${prefix}/REMOVE_FROM_CART`
+export const SORT_ITEMS = `${prefix}/SORT_ITEMS`
 
 const initialState = {
   loading: false,
+  sortOrderBy: 'ask',
   items: []
 }
 
@@ -24,7 +27,7 @@ export default function reducer(state = initialState, action) {
 
   switch (type) {
     case FETCH_ITEMS_SUCCESS:
-      return { loading: false, items: [...payload] }
+      return { ...state, loading: false, items: [...payload] }
     case ADD_TO_CART:
       return {
         ...state,
@@ -45,6 +48,16 @@ export default function reducer(state = initialState, action) {
           return item
         })
       }
+
+    case SORT_ITEMS:
+      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
+      const sortedItems = sortBy(state.items, o => o[payload])
+
+      return {
+        ...state,
+        sortOrderBy,
+        items: sortOrderBy === 'ask' ? sortedItems : sortedItems.reverse()
+      }
     default:
       return state
   }
@@ -59,5 +72,11 @@ export function removeFromCart(item) {
   return {
     type: REMOVE_FROM_CART,
     payload: item
+  }
+}
+export function sortItems(name) {
+  return {
+    type: SORT_ITEMS,
+    payload: name
   }
 }

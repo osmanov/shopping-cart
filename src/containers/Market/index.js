@@ -2,37 +2,58 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { itemsListSelector, addToCart } from '../../ducks/market'
+import { itemsListSelector, addToCart, sortItems } from '../../ducks/market'
 import { moduleName } from '../../ducks/shop'
 class Market extends Component {
   static propTypes = {
     loading: PropTypes.bool,
     items: PropTypes.array.isRequired,
-    addToCart: PropTypes.func.isRequired
+    addToCart: PropTypes.func.isRequired,
+    sortItems: PropTypes.func.isRequired
   }
 
   handleOnClickRow = item => {
     const { addToCart } = this.props
     return () => addToCart(item)
   }
+  handleSortBy = name => {
+    const { sortItems } = this.props
+    return () => sortItems(name)
+  }
   render() {
     const { items } = this.props
-
     return (
-      <ul>
-        {items.map(item => (
-          <li key={shortid.generate()}>
-            {item.title} {item.quantity}
-            <button
-              type="button"
-              disabled={item.quantity === 0}
-              onClick={this.handleOnClickRow(item)}
-            >
-              добавить в корзину
-            </button>
-          </li>
-        ))}
-      </ul>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th onClick={this.handleSortBy('title')}>Название</th>
+            <th onClick={this.handleSortBy('price')}>Цена</th>
+            <th onClick={this.handleSortBy('quantity')}>Кол-во</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, num) => (
+            <tr key={shortid.generate()}>
+              <th>{num + 1}</th>
+              <td>{item.title}</td>
+              <td>{item.price}</td>
+              <td>{item.quantity}</td>
+              <td>
+                <button
+                  type="button"
+                  disabled={item.quantity === 0}
+                  onClick={this.handleOnClickRow(item)}
+                  className="btn btn-info"
+                >
+                  добавить в корзину
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     )
   }
 }
@@ -40,5 +61,5 @@ export default connect(
   state => ({
     items: itemsListSelector(state)
   }),
-  { addToCart }
+  { addToCart, sortItems }
 )(Market)

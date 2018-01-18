@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { all, call, put, take } from 'redux-saga/effects'
+import { all, call, put, take, takeEvery } from 'redux-saga/effects'
+
 import { getItems } from '../api'
 import { appName } from '../config'
 
@@ -14,6 +15,7 @@ const initialState = {
   loading: false,
   loaded: false,
   items: [],
+
   error: null
 }
 
@@ -30,7 +32,13 @@ export default function reducer(state = initialState, action) {
     case FETCH_ITEMS_REQUEST:
       return { ...state, loading: true, loaded: false }
     case FETCH_ITEMS_SUCCESS:
-      return { loading: false, items: [...payload], loaded: true, error: null }
+      return {
+        ...state,
+        loading: false,
+        items: [...payload],
+        loaded: true,
+        error: null
+      }
     case FETCH_ITEMS_ERROR:
       return { ...state, loading: false, loaded: false, error }
     default:
@@ -61,6 +69,7 @@ export const fetchItemsSaga = function*(action) {
     }
   }
 }
+
 export const saga = function*() {
   yield all([fetchItemsSaga()])
 }
