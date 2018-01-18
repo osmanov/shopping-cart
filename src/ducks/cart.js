@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import isArray from 'lodash.isarray'
-import { ADD_TO_CART } from './market'
+import { ADD_TO_CART, REMOVE_FROM_CART } from './market'
 import { appName } from '../config'
 import { mergeItemsByIds } from '../utils'
 
@@ -57,6 +57,27 @@ export default function reducer(state = initialState, action) {
         ...state,
         items: [...mergeItemsByIds([...state.items, payload])]
       }
+    case REMOVE_ITEM:
+      return {
+        ...state,
+        items: state.items.reduce((res, current) => {
+          if (current.id === payload.id) {
+            const { price } = current
+            if (isArray(price)) {
+              const newPrice = price.slice(1)
+              return [
+                ...res,
+                {
+                  ...current,
+                  price: newPrice.length > 1 ? newPrice : newPrice[0]
+                }
+              ]
+            }
+            return res
+          }
+          return [...res, current]
+        }, [])
+      }
     default:
       return state
   }
@@ -68,7 +89,16 @@ export const addItemSaga = function*(action) {
     payload
   })
 }
-
+export const removeItemSaga = function*(action) {
+  const { payload } = action
+  yield put({
+    type: REMOVE_ITEM,
+    payload
+  })
+}
 export const saga = function*() {
-  yield all([takeEvery(ADD_TO_CART, addItemSaga)])
+  yield all([
+    takeEvery(ADD_TO_CART, addItemSaga),
+    takeEvery(REMOVE_FROM_CART, removeItemSaga)
+  ])
 }

@@ -6,6 +6,9 @@ import { connect } from 'react-redux'
 import { itemsListSelector, totalSelector } from '../../ducks/cart'
 import { removeFromCart, addToCart } from '../../ducks/market'
 class Cart extends Component {
+  handleRemoveClick = item => {
+    return () => this.props.removeFromCart(item)
+  }
   handleAddClick = item => {
     return () => this.props.addToCart(item)
   }
@@ -26,7 +29,12 @@ class Cart extends Component {
           return (
             <li key={shortid.generate()}>
               {title} {descriptionPrice}
-              <button>-</button>
+              <button
+                disabled={disabledStatus.remove}
+                onClick={this.handleRemoveClick(entity.item)}
+              >
+                -
+              </button>
               <button
                 disabled={disabledStatus.add}
                 onClick={this.handleAddClick(entity.item)}
@@ -49,5 +57,5 @@ export default connect(
     items: itemsListSelector(state),
     total: totalSelector(state)
   }),
-  { addToCart }
+  { addToCart, removeFromCart }
 )(Cart)
