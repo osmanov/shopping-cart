@@ -6,7 +6,11 @@ import rootSaga from './saga'
 import { loadState, saveState } from './localStorage'
 
 const sagaMiddleware = createSagaMiddleware()
-const enhancer = applyMiddleware(sagaMiddleware, logger)
+const middleware = [sagaMiddleware]
+if (process.env.NODE_ENV !== 'production') {
+  middleware.push(logger)
+}
+const enhancer = applyMiddleware(...middleware)
 const persistedState = loadState()
 const store = createStore(reducer, persistedState, enhancer)
 store.subscribe(() => {
