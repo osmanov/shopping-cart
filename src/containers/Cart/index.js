@@ -85,7 +85,10 @@ class Cart extends Component {
         key={shortid.generate()}
         price={total.price}
         quantity={total.quantity}
-      />
+      />,
+      <button type="button" className="btn btn-warning">
+        Купить
+      </button>
     ]
   }
 }
