@@ -3,7 +3,7 @@ import shortid from 'shortid'
 import sortBy from 'lodash.sortby'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import CartResume from '../../components/CartResume'
 import { itemsListSelector, totalSelector, sortItems } from '../../ducks/cart'
 import { removeFromCart, addToCart } from '../../ducks/market'
 class Cart extends Component {
@@ -81,11 +81,11 @@ class Cart extends Component {
         {this.renderHead()}
         {this.renderBody()}
       </table>,
-      <div key={shortid.generate()}>
-        <div>------------------------------------------------</div>
-        Итого в корзине товаров: {total.quantity} шт.
-        <div>на сумму:{total.price}</div>
-      </div>
+      <CartResume
+        key={shortid.generate()}
+        price={total.price}
+        quantity={total.quantity}
+      />
     ]
   }
 }
