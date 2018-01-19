@@ -10,9 +10,11 @@ const prefix = `${appName}/${moduleName}`
 
 export const ADD_ITEM = `${prefix}/ADD_ITEM`
 export const REMOVE_ITEM = `${prefix}/REMOVE_ITEM`
+export const SORT_ITEMS = `${prefix}/SORT_ITEMS`
 
 const initialState = {
-  items: []
+  items: [],
+  sortOrderBy: 'ask'
 }
 
 export const stateSelector = state => state[moduleName]
@@ -31,6 +33,8 @@ export const itemsListSelector = createSelector(stateSelector, state => {
       remove: false
     }
     return {
+      id: item.id,
+      title: item.title,
       item: { ...item, price: itemPrice },
       totalPrice: itemQuantity * itemPrice,
       quantity: itemQuantity,
@@ -78,8 +82,25 @@ export default function reducer(state = initialState, action) {
           return [...res, current]
         }, [])
       }
+    case SORT_ITEMS:
+      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
+      const sortedItems = payload.map(filteredItem => {
+        return { ...state.items.filter(item => item.id === filteredItem.id)[0] }
+      })
+
+      return {
+        ...state,
+        sortOrderBy,
+        items: sortOrderBy === 'ask' ? sortedItems : sortedItems.reverse()
+      }
     default:
       return state
+  }
+}
+export function sortItems(item) {
+  return {
+    type: SORT_ITEMS,
+    payload: item
   }
 }
 export const addItemSaga = function*(action) {

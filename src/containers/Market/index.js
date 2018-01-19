@@ -22,8 +22,9 @@ class Market extends Component {
   }
   render() {
     const { items } = this.props
-    return (
-      <table className="table">
+    return [
+      <h1 key={shortid.generate()}>Товары:</h1>,
+      <table key={shortid.generate()} className="table">
         <thead>
           <tr>
             <th>#</th>
@@ -54,7 +55,7 @@ class Market extends Component {
           ))}
         </tbody>
       </table>
-    )
+    ]
   }
 }
 export default connect(
