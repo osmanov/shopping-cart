@@ -20,40 +20,50 @@ class Market extends Component {
     const { sortItems } = this.props
     return () => sortItems(name)
   }
-  render() {
+  renderHead = () => {
+    return (
+      <thead>
+        <tr>
+          <th>#</th>
+          <th onClick={this.handleSortBy('title')}>Название</th>
+          <th onClick={this.handleSortBy('price')}>Цена</th>
+          <th onClick={this.handleSortBy('quantity')}>Кол-во</th>
+          <th />
+        </tr>
+      </thead>
+    )
+  }
+  renderBody = () => {
     const { items } = this.props
+    return (
+      <tbody>
+        {items.map((item, num) => (
+          <tr key={shortid.generate()}>
+            <th>{num + 1}</th>
+            <td>{item.title}</td>
+            <td>{item.price}</td>
+            <td>{item.quantity}</td>
+            <td>
+              <button
+                type="button"
+                disabled={item.quantity === 0}
+                onClick={this.handleOnClickRow(item)}
+                className="btn btn-info"
+              >
+                добавить в корзину
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    )
+  }
+  render() {
     return [
       <h1 key={shortid.generate()}>Товары:</h1>,
       <table key={shortid.generate()} className="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th onClick={this.handleSortBy('title')}>Название</th>
-            <th onClick={this.handleSortBy('price')}>Цена</th>
-            <th onClick={this.handleSortBy('quantity')}>Кол-во</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, num) => (
-            <tr key={shortid.generate()}>
-              <th>{num + 1}</th>
-              <td>{item.title}</td>
-              <td>{item.price}</td>
-              <td>{item.quantity}</td>
-              <td>
-                <button
-                  type="button"
-                  disabled={item.quantity === 0}
-                  onClick={this.handleOnClickRow(item)}
-                  className="btn btn-info"
-                >
-                  добавить в корзину
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        {this.renderHead()}
+        {this.renderBody()}
       </table>
     ]
   }

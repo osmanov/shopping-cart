@@ -17,61 +17,73 @@ class Cart extends Component {
     const { sortItems, items } = this.props
     return () => sortItems(sortBy(items, o => o[name]))
   }
-  render() {
+  renderHead = () => {
+    return (
+      <thead>
+        <tr>
+          <th>#</th>
+          <th onClick={this.handleSortBy('title')}>Название</th>
+          <th onClick={this.handleSortBy('totalPrice')}>Цена</th>
+          <th onClick={this.handleSortBy('quantity')}>Кол-во</th>
+        </tr>
+      </thead>
+    )
+  }
+  renderBody = () => {
     const { items, total } = this.props
+    return (
+      <tbody>
+        {items.map((entity, num) => {
+          const {
+            disabledStatus,
+            quantity,
+            totalPrice,
+            item: { title, price }
+          } = entity
+
+          const descriptionPrice = `${quantity}x${price}=${totalPrice}`
+          return (
+            <tr key={shortid.generate()}>
+              <th>{num + 1}</th>
+              <td>{title}</td>
+              <td>{descriptionPrice}</td>
+              <td>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  disabled={disabledStatus.remove}
+                  onClick={this.handleRemoveClick(entity.item)}
+                >
+                  -
+                </button>
+                {quantity}
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={disabledStatus.add}
+                  onClick={this.handleAddClick(entity.item)}
+                >
+                  +
+                </button>
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    )
+  }
+  render() {
+    const { total } = this.props
     if (!total.quantity) return <h1>Корзина пуста</h1>
     return [
       <h1 key={shortid.generate()}>Корзина:</h1>,
       <table key={shortid.generate()} className="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th onClick={this.handleSortBy('title')}>Название</th>
-            <th onClick={this.handleSortBy('totalPrice')}>Цена</th>
-            <th onClick={this.handleSortBy('quantity')}>Кол-во</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((entity, num) => {
-            const {
-              disabledStatus,
-              quantity,
-              totalPrice,
-              item: { title, price }
-            } = entity
-
-            const descriptionPrice = `${quantity}x${price}=${totalPrice}`
-            return (
-              <tr key={shortid.generate()}>
-                <th>{num + 1}</th>
-                <td>{title}</td>
-                <td>{descriptionPrice}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-sm"
-                    disabled={disabledStatus.remove}
-                    onClick={this.handleRemoveClick(entity.item)}
-                  >
-                    -
-                  </button>
-                  {quantity}
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    disabled={disabledStatus.add}
-                    onClick={this.handleAddClick(entity.item)}
-                  >
-                    +
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
+        {this.renderHead()}
+        {this.renderBody()}
       </table>,
       <div key={shortid.generate()}>
-        Итого в корзине товаров:{total.quantity} шт.
+        <div>------------------------------------------------</div>
+        Итого в корзине товаров: {total.quantity} шт.
         <div>на сумму:{total.price}</div>
       </div>
     ]
