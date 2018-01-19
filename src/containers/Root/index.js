@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import shortid from 'shortid'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import MarketContainer from '../Market'
@@ -28,7 +27,7 @@ class Root extends Component {
     }
   }
   render() {
-    const { loading, items, cartSended, toMarket } = this.props
+    const { loading, cartSended, toMarket } = this.props
     if (loading) {
       return <h1>Loading...</h1>
     }

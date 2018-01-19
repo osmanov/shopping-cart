@@ -8,4 +8,8 @@ const CartResume = ({ price, quantity }) => (
     <div>на сумму:{price}</div>
   </div>
 )
+CartResume.propTypes = {
+  price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired
+}
 export default CartResume

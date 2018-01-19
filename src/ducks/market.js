@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import sortBy from 'lodash.sortby'
-import { all, call, put, take, takeEvery } from 'redux-saga/effects'
 import { FETCH_ITEMS_SUCCESS } from './shop'
 import { SEND_PURCHASE_SUCCESS } from './cart'
 import { appName } from '../config'
@@ -24,7 +23,7 @@ export const itemsListSelector = createSelector(
   state => state.items
 )
 export default function reducer(state = initialState, action) {
-  const { type, payload, error } = action
+  const { type, payload } = action
 
   switch (type) {
     case SEND_PURCHASE_SUCCESS:

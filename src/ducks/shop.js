@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
-import { all, call, put, take, takeEvery } from 'redux-saga/effects'
-import { RESET_ME } from './cart'
+import { all, call, put, take } from 'redux-saga/effects'
 import { getItems } from '../api'
 import { appName } from '../config'
 

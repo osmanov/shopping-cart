@@ -12,6 +12,14 @@ import {
 } from '../../ducks/cart'
 import { removeFromCart, addToCart } from '../../ducks/market'
 class Cart extends Component {
+  static propTypes = {
+    items: PropTypes.array.isRequired,
+    total: PropTypes.object.isRequired,
+    sendPurchase: PropTypes.func.isRequired,
+    sortItems: PropTypes.func.isRequired,
+    removeFromCart: PropTypes.func.isRequired,
+    addToCart: PropTypes.func.isRequired
+  }
   handleRemoveClick = item => {
     return () => this.props.removeFromCart(item)
   }
@@ -47,7 +55,7 @@ class Cart extends Component {
     )
   }
   renderBody = () => {
-    const { items, total } = this.props
+    const { items } = this.props
     return (
       <tbody>
         {items.map((entity, num) => {

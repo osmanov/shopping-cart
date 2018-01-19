@@ -3,7 +3,6 @@ import shortid from 'shortid'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { itemsListSelector, addToCart, sortItems } from '../../ducks/market'
-import { moduleName } from '../../ducks/shop'
 class Market extends Component {
   static propTypes = {
     loading: PropTypes.bool,
