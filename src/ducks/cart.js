@@ -66,9 +66,10 @@ export default function reducer(state = initialState, action) {
     case RESET_ME:
       return { ...initialState }
     case ADD_ITEM:
+      console.log(payload)
       return {
         ...state,
-        items: [...mergeItemsByIds([...state.items, payload])]
+        items: [...mergeItemsByIds([...state.items, { ...payload }])]
       }
     case REMOVE_ITEM:
       return {
