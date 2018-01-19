@@ -4,7 +4,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import MarketContainer from '../Market'
 import CartContainer from '../Cart'
+import SuccessSend from '../../components/SuccessSend'
 import { itemsListSelector, moduleName, fetchItems } from '../../ducks/shop'
+import { moduleName as moduleCart, resetMe as toMarket } from '../../ducks/cart'
 import { removeState } from '../../redux/localStorage'
 
 class Root extends Component {
@@ -20,26 +22,34 @@ class Root extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.cartSended !== this.props.cartSended) {
+      removeState()
+    }
+  }
   render() {
-    const { loading, items } = this.props
+    const { loading, items, cartSended, toMarket } = this.props
     if (loading) {
       return <h1>Loading...</h1>
+    }
+    if (cartSended) {
+      return <SuccessSend toMarket={toMarket} />
     }
     return (
       <div>
         <MarketContainer />
         <hr />
         <CartContainer />
-        <button onClick={removeState}>reset</button>
       </div>
     )
   }
 }
 export default connect(
   state => ({
-    loading: state[moduleName].loading,
+    loading: state[moduleName].loading || state[moduleCart].loading,
     loaded: state[moduleName].loaded,
+    cartSended: state[moduleCart].sended,
     items: itemsListSelector(state)
   }),
-  { fetchItems }
+  { fetchItems, toMarket }
 )(Root)

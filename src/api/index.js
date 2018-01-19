@@ -7,3 +7,7 @@ function requestFake(data, time = 1000) {
 export function getItems() {
   return requestFake(items)
 }
+export function postItems(items) {
+  alert(JSON.stringify(items))
+  return requestFake({ status: 200 })
+}

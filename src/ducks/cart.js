@@ -1,19 +1,26 @@
 import { createSelector } from 'reselect'
-import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { all, call, put, takeEvery, take } from 'redux-saga/effects'
 import isArray from 'lodash.isarray'
 import { ADD_TO_CART, REMOVE_FROM_CART } from './market'
+import { FETCH_ITEMS_REQUEST, fetchItemsSaga } from './shop'
 import { appName } from '../config'
 import { mergeItemsByIds } from '../utils'
-
+import { postItems } from '../api'
 export const moduleName = 'cart'
 const prefix = `${appName}/${moduleName}`
 
 export const ADD_ITEM = `${prefix}/ADD_ITEM`
 export const REMOVE_ITEM = `${prefix}/REMOVE_ITEM`
 export const SORT_ITEMS = `${prefix}/SORT_ITEMS`
+export const SEND_PURCHASE_REQUEST = `${prefix}/SEND_PURCHASE_REQUEST`
+export const SEND_PURCHASE_SUCCESS = `${prefix}/SEND_PURCHASE_SUCCESS`
+export const SEND_PURCHASE_ERROR = `${prefix}/SEND_PURCHASE_ERROR`
+export const RESET_ME = `${prefix}/RESET_ME`
 
 const initialState = {
   items: [],
+  loading: false,
+  sended: false,
   sortOrderBy: 'ask'
 }
 
@@ -54,8 +61,10 @@ export const totalSelector = createSelector(itemsListSelector, itemsList =>
 )
 
 export default function reducer(state = initialState, action) {
-  const { type, payload } = action
+  const { type, payload, error } = action
   switch (type) {
+    case RESET_ME:
+      return { ...initialState }
     case ADD_ITEM:
       return {
         ...state,
@@ -93,14 +102,46 @@ export default function reducer(state = initialState, action) {
         sortOrderBy,
         items: sortOrderBy === 'ask' ? sortedItems : sortedItems.reverse()
       }
+    case SEND_PURCHASE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        sended: false,
+        error: null
+      }
+    case SEND_PURCHASE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        sended: true,
+        error: null
+      }
+    case SEND_PURCHASE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        sended: false,
+        error
+      }
     default:
       return state
+  }
+}
+export function resetMe() {
+  return {
+    type: RESET_ME
   }
 }
 export function sortItems(item) {
   return {
     type: SORT_ITEMS,
     payload: item
+  }
+}
+export function sendPurchase(items) {
+  return {
+    type: SEND_PURCHASE_REQUEST,
+    payload: items
   }
 }
 export const addItemSaga = function*(action) {
@@ -117,9 +158,30 @@ export const removeItemSaga = function*(action) {
     payload
   })
 }
+export const sendPurchaseSaga = function*() {
+  while (true) {
+    const action = yield take(SEND_PURCHASE_REQUEST)
+    try {
+      yield call(postItems, action.payload)
+      yield put({
+        type: SEND_PURCHASE_SUCCESS
+      })
+      yield put({
+        type: FETCH_ITEMS_REQUEST
+      })
+    } catch (error) {
+      yield put({
+        type: SEND_PURCHASE_ERROR,
+        error
+      })
+    }
+  }
+}
+
 export const saga = function*() {
   yield all([
     takeEvery(ADD_TO_CART, addItemSaga),
-    takeEvery(REMOVE_FROM_CART, removeItemSaga)
+    takeEvery(REMOVE_FROM_CART, removeItemSaga),
+    sendPurchaseSaga()
   ])
 }

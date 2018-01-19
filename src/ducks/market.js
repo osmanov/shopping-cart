@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import sortBy from 'lodash.sortby'
 import { all, call, put, take, takeEvery } from 'redux-saga/effects'
 import { FETCH_ITEMS_SUCCESS } from './shop'
+import { SEND_PURCHASE_SUCCESS } from './cart'
 import { appName } from '../config'
 
 export const moduleName = 'market'
@@ -26,6 +27,8 @@ export default function reducer(state = initialState, action) {
   const { type, payload, error } = action
 
   switch (type) {
+    case SEND_PURCHASE_SUCCESS:
+      return { ...initialState }
     case FETCH_ITEMS_SUCCESS:
       return { ...state, loading: false, items: [...payload] }
     case ADD_TO_CART:

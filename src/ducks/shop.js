@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { all, call, put, take, takeEvery } from 'redux-saga/effects'
-
+import { RESET_ME } from './cart'
 import { getItems } from '../api'
 import { appName } from '../config'
 
@@ -54,7 +54,6 @@ export function fetchItems() {
 export const fetchItemsSaga = function*(action) {
   while (true) {
     yield take(FETCH_ITEMS_REQUEST)
-
     try {
       const items = yield call(getItems)
       yield put({

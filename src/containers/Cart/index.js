@@ -4,7 +4,12 @@ import sortBy from 'lodash.sortby'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import CartResume from '../../components/CartResume'
-import { itemsListSelector, totalSelector, sortItems } from '../../ducks/cart'
+import {
+  itemsListSelector,
+  totalSelector,
+  sortItems,
+  sendPurchase
+} from '../../ducks/cart'
 import { removeFromCart, addToCart } from '../../ducks/market'
 class Cart extends Component {
   handleRemoveClick = item => {
@@ -16,6 +21,18 @@ class Cart extends Component {
   handleSortBy = name => {
     const { sortItems, items } = this.props
     return () => sortItems(sortBy(items, o => o[name]))
+  }
+  handleSendClick = () => {
+    const { sendPurchase, items } = this.props
+    return () =>
+      sendPurchase(
+        items.map(({ id, title, quantity, totalPrice }) => ({
+          id,
+          title,
+          quantity,
+          totalPrice
+        }))
+      )
   }
   renderHead = () => {
     return (
@@ -86,7 +103,12 @@ class Cart extends Component {
         price={total.price}
         quantity={total.quantity}
       />,
-      <button type="button" className="btn btn-warning">
+      <button
+        key={shortid.generate()}
+        type="button"
+        className="btn btn-warning"
+        onClick={this.handleSendClick()}
+      >
         Купить
       </button>
     ]
@@ -97,5 +119,5 @@ export default connect(
     items: itemsListSelector(state),
     total: totalSelector(state)
   }),
-  { addToCart, removeFromCart, sortItems }
+  { addToCart, removeFromCart, sortItems, sendPurchase }
 )(Cart)
