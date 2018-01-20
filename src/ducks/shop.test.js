@@ -7,9 +7,12 @@ import reducer, {
   FETCH_ITEMS_ERROR
 } from './shop'
 
-it('should get items', () => {
+const items = [{ id: 1, title: 'apple', price: 50, quantity: 1 }]
+/**
+ * Saga Tests
+ */
+it('saga should get items', () => {
   const saga = fetchItemsSaga()
-  const items = [{ id: 1, title: 'apple', price: 50, quantity: 1 }]
   const requestAction = {
     type: FETCH_ITEMS_REQUEST
   }
@@ -29,4 +32,19 @@ it('should get items', () => {
       error
     })
   )
+})
+
+/**
+ * Reducer Tests
+ */
+it('reducer should get items', () => {
+  const state = {
+    items,
+    loading: false,
+    loaded: true,
+    error: null
+  }
+
+  const newState = reducer(state, { type: FETCH_ITEMS_SUCCESS, payload: items })
+  expect(newState).toEqual(state)
 })
