@@ -1,5 +1,6 @@
 import { take, call, put } from 'redux-saga/effects'
 import { getItems } from '../api'
+import items from '../api/items.json'
 import reducer, {
   fetchItemsSaga,
   FETCH_ITEMS_REQUEST,
@@ -7,7 +8,6 @@ import reducer, {
   FETCH_ITEMS_ERROR
 } from './shop'
 
-const items = [{ id: 1, title: 'apple', price: 50, quantity: 1 }]
 /**
  * Saga Tests
  */

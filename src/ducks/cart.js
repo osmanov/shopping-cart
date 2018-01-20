@@ -21,7 +21,8 @@ const initialState = {
   items: [],
   loading: false,
   sended: false,
-  sortOrderBy: 'ask'
+  sortOrderBy: 'ask',
+  error: null
 }
 
 export const stateSelector = state => state[moduleName]
