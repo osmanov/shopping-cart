@@ -7,8 +7,7 @@
 * `add/remove` items
 * `sort` items by column click
 * `send` cart
-* `app state` memory
-* `ducks` test coverage:tada:
+* `app state` memory:tada:
 
 ## For a local launch:
 
