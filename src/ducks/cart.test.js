@@ -6,6 +6,8 @@ import reducer, {
   addItemSaga,
   removeItemSaga,
   sendPurchaseSaga,
+  itemsListSelector,
+  totalSelector,
   ADD_ITEM,
   REMOVE_ITEM,
   SORT_ITEMS,
@@ -198,4 +200,38 @@ it('reducer should reset state to initial', () => {
     type: RESET_ME
   })
   expect(newState).toEqual(outState)
+})
+
+/**
+ * Selector Tests
+ */
+const itemsListSelectorMock = [
+  {
+    id: 1,
+    title: 'test',
+    item: { id: 1, quantity: 2, title: 'test', price: 1 },
+    totalPrice: 2,
+    quantity: 2,
+    disabledStatus: {
+      add: true,
+      remove: false
+    }
+  }
+]
+
+it('itemsListSelector calculation', () => {
+  let state = {
+    cart: {
+      items: [{ ...itemsListSelectorMock[0].item, price: [1, 1] }]
+    }
+  }
+  expect(itemsListSelector(state)).toEqual(itemsListSelectorMock)
+})
+it('totalSelector calculation', () => {
+  let state = {
+    cart: {
+      items: [{ ...itemsListSelectorMock[0].item, price: [1, 1] }]
+    }
+  }
+  expect(totalSelector(state)).toEqual({ price: 2, quantity: 2 })
 })
