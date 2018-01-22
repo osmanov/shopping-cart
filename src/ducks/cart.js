@@ -23,7 +23,6 @@ const initialState = {
   items: [],
   loading: false,
   sended: false,
-  sortOrderBy: 'ask',
   error: null
 }
 
@@ -95,15 +94,13 @@ export default function reducer(state = initialState, action) {
         }, [])
       }
     case SORT_ITEMS:
-      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
-      const sortedItems = payload.map(filteredItem => {
+      const items = payload.map(filteredItem => {
         return { ...state.items.filter(item => item.id === filteredItem.id)[0] }
       })
 
       return {
         ...state,
-        sortOrderBy,
-        items: sortOrderBy === 'ask' ? sortedItems : sortedItems.reverse()
+        items
       }
     case SEND_PURCHASE_REQUEST:
       return {
