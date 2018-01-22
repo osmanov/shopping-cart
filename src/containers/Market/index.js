@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import shortid from 'shortid'
+import React, { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { itemsListSelector, addToCart, sortItems } from '../../ducks/market'
@@ -37,7 +36,7 @@ class Market extends Component {
     return (
       <tbody>
         {items.map((item, num) => (
-          <tr key={shortid.generate()}>
+          <tr key={item.id}>
             <th>{num + 1}</th>
             <td>{item.title}</td>
             <td>{item.price}</td>
@@ -58,13 +57,15 @@ class Market extends Component {
     )
   }
   render() {
-    return [
-      <h1 key={shortid.generate()}>Товары:</h1>,
-      <table key={shortid.generate()} className="table">
-        {this.renderHead()}
-        {this.renderBody()}
-      </table>
-    ]
+    return (
+      <Fragment>
+        <h1>Товары:</h1>
+        <table className="table">
+          {this.renderHead()}
+          {this.renderBody()}
+        </table>
+      </Fragment>
+    )
   }
 }
 export default connect(

@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import shortid from 'shortid'
+import React, { Fragment, Component } from 'react'
 import sortBy from 'lodash.sortby'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -63,12 +62,12 @@ class Cart extends Component {
             disabledStatus,
             quantity,
             totalPrice,
-            item: { title, price }
+            item: { title, price, id }
           } = entity
 
           const descriptionPrice = `${quantity}x${price}=${totalPrice}`
           return (
-            <tr key={shortid.generate()}>
+            <tr key={id}>
               <th>{num + 1}</th>
               <td>{title}</td>
               <td>{descriptionPrice}</td>
@@ -100,26 +99,24 @@ class Cart extends Component {
   render() {
     const { total } = this.props
     if (!total.quantity) return <h1>Корзина пуста</h1>
-    return [
-      <h1 key={shortid.generate()}>Корзина:</h1>,
-      <table key={shortid.generate()} className="table">
-        {this.renderHead()}
-        {this.renderBody()}
-      </table>,
-      <CartResume
-        key={shortid.generate()}
-        price={total.price}
-        quantity={total.quantity}
-      />,
-      <button
-        key={shortid.generate()}
-        type="button"
-        className="btn btn-warning"
-        onClick={this.handleSendClick()}
-      >
-        Купить
-      </button>
-    ]
+
+    return (
+      <Fragment>
+        <h1>Корзина:</h1>
+        <table className="table">
+          {this.renderHead()}
+          {this.renderBody()}
+        </table>
+        <CartResume price={total.price} quantity={total.quantity} />
+        <button
+          type="button"
+          className="btn btn-warning"
+          onClick={this.handleSendClick()}
+        >
+          Купить
+        </button>
+      </Fragment>
+    )
   }
 }
 export default connect(
