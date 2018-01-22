@@ -6,7 +6,6 @@ import CartContainer from '../Cart'
 import SuccessSend from '../../components/SuccessSend'
 import { itemsListSelector, moduleName, fetchItems } from '../../ducks/shop'
 import { moduleName as moduleCart, resetMe as toMarket } from '../../ducks/cart'
-import { removeState } from '../../redux/localStorage'
 
 class Root extends Component {
   static propTypes = {
@@ -21,11 +20,6 @@ class Root extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.cartSended !== this.props.cartSended) {
-      removeState()
-    }
-  }
   render() {
     const { loading, cartSended, toMarket } = this.props
     if (loading) {

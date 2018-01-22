@@ -6,6 +6,8 @@ import { FETCH_ITEMS_REQUEST } from './shop'
 import { appName } from '../config'
 import { mergeItemsByIds } from '../utils'
 import { postItems } from '../api'
+import { removeState } from '../redux/localStorage'
+
 export const moduleName = 'cart'
 const prefix = `${appName}/${moduleName}`
 
@@ -167,6 +169,7 @@ export const sendPurchaseSaga = function*() {
       yield put({
         type: SEND_PURCHASE_SUCCESS
       })
+      yield call(removeState)
       yield put({
         type: FETCH_ITEMS_REQUEST
       })

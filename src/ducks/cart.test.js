@@ -1,6 +1,7 @@
 import { take, call, put } from 'redux-saga/effects'
 import { postItems } from '../api'
 import items from '../api/items.json'
+import { removeState } from '../redux/localStorage'
 import { FETCH_ITEMS_REQUEST } from './shop'
 import reducer, {
   addItemSaga,
@@ -56,6 +57,7 @@ it('saga should send purchase', () => {
       type: SEND_PURCHASE_SUCCESS
     })
   )
+  expect(saga.next().value).toEqual(call(removeState))
   expect(saga.next().value).toEqual(
     put({
       type: FETCH_ITEMS_REQUEST
