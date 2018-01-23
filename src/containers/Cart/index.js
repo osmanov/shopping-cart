@@ -3,6 +3,7 @@ import sortBy from 'lodash.sortby'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import CartResume from '../../components/CartResume'
+import { sort } from '../../utils'
 import {
   itemsListSelector,
   totalSelector,
@@ -27,7 +28,8 @@ class Cart extends Component {
   }
   handleSortBy = name => {
     const { sortItems, items } = this.props
-    return () => sortItems(sortBy(items, o => o[name]))
+    console.log(items)
+    return () => sortItems({ name, items })
   }
   handleSendClick = () => {
     const { sendPurchase, items } = this.props

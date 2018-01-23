@@ -26,14 +26,15 @@ function stableSort(arr, compare) {
 }
 
 export const sort = (items, name, orderBy = 'ask') => {
+  const cloned = items.slice()
   if (orderBy === 'ask') {
     return stableSort(
-      items,
+      cloned,
       (a, b) => (a[name] > b[name] ? 1 : a[name] < b[name] ? -1 : 0)
     )
   }
   return stableSort(
-    items,
+    cloned,
     (a, b) => (a[name] < b[name] ? 1 : a[name] > b[name] ? -1 : 0)
   )
 }

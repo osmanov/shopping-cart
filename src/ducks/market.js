@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import sortBy from 'lodash.sortby'
+import { sort } from '../utils'
 import { FETCH_ITEMS_SUCCESS } from './shop'
 import { SEND_PURCHASE_SUCCESS } from './cart'
 import { appName } from '../config'
@@ -13,6 +13,7 @@ export const SORT_ITEMS = `${prefix}/SORT_ITEMS`
 
 const initialState = {
   loading: false,
+  sortOrderBy: 'ask',
   items: []
 }
 
@@ -51,10 +52,11 @@ export default function reducer(state = initialState, action) {
       }
 
     case SORT_ITEMS:
-      const items = sortBy(state.items, o => o[payload])
+      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
       return {
         ...state,
-        items
+        sortOrderBy,
+        items: sort(state.items, payload, sortOrderBy)
       }
     default:
       return state

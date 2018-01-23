@@ -7,6 +7,7 @@ import { appName } from '../config'
 import { mergeItemsByIds } from '../utils'
 import { postItems } from '../api'
 import { removeState } from '../redux/localStorage'
+import { sort } from '../utils'
 
 export const moduleName = 'cart'
 const prefix = `${appName}/${moduleName}`
@@ -23,6 +24,7 @@ const initialState = {
   items: [],
   loading: false,
   sended: false,
+  sortOrderBy: 'ask',
   error: null
 }
 
@@ -94,12 +96,18 @@ export default function reducer(state = initialState, action) {
         }, [])
       }
     case SORT_ITEMS:
-      const items = payload.map(filteredItem => {
+      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
+      //const { disabledStatus, item, ...others } = state.items
+      const sorted = sort(payload.items, payload.name, sortOrderBy)
+      console.log(payload.items)
+
+      const items = sorted.map(filteredItem => {
         return { ...state.items.filter(item => item.id === filteredItem.id)[0] }
       })
 
       return {
         ...state,
+        sortOrderBy,
         items
       }
     case SEND_PURCHASE_REQUEST:
@@ -132,10 +140,10 @@ export function resetMe() {
     type: RESET_ME
   }
 }
-export function sortItems(item) {
+export function sortItems(payload) {
   return {
     type: SORT_ITEMS,
-    payload: item
+    payload
   }
 }
 export function sendPurchase(items) {
