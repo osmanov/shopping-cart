@@ -97,10 +97,7 @@ export default function reducer(state = initialState, action) {
       }
     case SORT_ITEMS:
       const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
-      //const { disabledStatus, item, ...others } = state.items
       const sorted = sort(payload.items, payload.name, sortOrderBy)
-      console.log(payload.items)
-
       const items = sorted.map(filteredItem => {
         return { ...state.items.filter(item => item.id === filteredItem.id)[0] }
       })
