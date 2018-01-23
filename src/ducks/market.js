@@ -13,7 +13,6 @@ export const SORT_ITEMS = `${prefix}/SORT_ITEMS`
 
 const initialState = {
   loading: false,
-  sortOrderBy: 'ask',
   items: []
 }
 
@@ -52,13 +51,10 @@ export default function reducer(state = initialState, action) {
       }
 
     case SORT_ITEMS:
-      const sortOrderBy = state.sortOrderBy === 'ask' ? 'desk' : 'ask'
-      const sortedItems = sortBy(state.items, o => o[payload])
-
+      const items = sortBy(state.items, o => o[payload])
       return {
         ...state,
-        sortOrderBy,
-        items: sortOrderBy === 'ask' ? sortedItems : sortedItems.reverse()
+        items
       }
     default:
       return state

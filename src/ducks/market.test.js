@@ -53,47 +53,25 @@ it('reducer should remove from cart', () => {
   expect(newState).toEqual(outState)
 })
 
-it('reducer should sort items by desk', () => {
-  const inState = {
-    sortOrderBy: 'ask',
+it('reducer should sort items by stable way', () => {
+  const state = {
     items
   }
-  const outState = {
-    items: [...items.reverse()],
-    sortOrderBy: 'desk'
-  }
-  const newState = reducer(inState, {
-    type: SORT_ITEMS,
-    payload: 'title'
-  })
-  expect(newState).toEqual(outState)
-})
 
-it('reducer should sort items by ask', () => {
-  const inState = {
-    sortOrderBy: 'desk',
-    items: [...items.reverse()]
-  }
-  const outState = {
-    items,
-    sortOrderBy: 'ask'
-  }
-  const newState = reducer(inState, {
+  const newState = reducer(state, {
     type: SORT_ITEMS,
-    payload: 'title'
+    payload: 'quantity'
   })
-  expect(newState).toEqual(outState)
+  expect(newState.items.map(item => item.quantity)).toEqual([1, 2, 3, 5, 8])
 })
 
 it('reducer should reset state to initial', () => {
   const inState = {
     items,
-    loading: true,
-    sortOrderBy: 'desk'
+    loading: true
   }
   const outState = {
     items: [],
-    sortOrderBy: 'ask',
     loading: false
   }
   const newState = reducer(inState, {
