@@ -127,11 +127,10 @@ it('reducer should remove item if it has been already existed', () => {
 })
 
 it('reducer should sort items by desk', () => {
-  const payload = [
-    { id: 20, price: 3 },
-    { id: 2, price: 12 },
-    { id: 1, price: 125 }
-  ]
+  const payload = {
+    name: 'price',
+    items: [{ id: 20, price: 3 }, { id: 2, price: 12 }, { id: 1, price: 125 }]
+  }
   const inState = {
     sortOrderBy: 'ask',
     items: [{ id: 2, price: 12 }, { id: 20, price: 3 }, { id: 1, price: 125 }]
@@ -140,28 +139,29 @@ it('reducer should sort items by desk', () => {
     type: SORT_ITEMS,
     payload
   })
+
   const outState = {
-    items: payload.reverse(),
-    sortOrderBy: 'desk'
+    sortOrderBy: 'desk',
+    items: [{ id: 1, price: 125 }, { id: 2, price: 12 }, { id: 20, price: 3 }]
   }
+
   expect(newState).toEqual(outState)
 })
 it('reducer should sort items by ask', () => {
-  const payload = [
-    { id: 20, price: 3 },
-    { id: 2, price: 12 },
-    { id: 1, price: 125 }
-  ]
+  const payload = {
+    name: 'price',
+    items: [{ id: 20, price: 3 }, { id: 2, price: 12 }, { id: 1, price: 125 }]
+  }
   const inState = {
     sortOrderBy: 'desk',
-    items: [{ id: 2, price: 12 }, { id: 20, price: 3 }, { id: 1, price: 125 }]
+    items: [{ id: 1, price: 125 }, { id: 2, price: 12 }, { id: 20, price: 3 }]
   }
   const newState = reducer(inState, {
     type: SORT_ITEMS,
     payload
   })
   const outState = {
-    items: payload,
+    items: [{ id: 20, price: 3 }, { id: 2, price: 12 }, { id: 1, price: 125 }],
     sortOrderBy: 'ask'
   }
   expect(newState).toEqual(outState)
