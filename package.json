@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://osmanov.github.io/shopping-cart",
   "dependencies": {
+    "cypress": "^2.1.0",
     "gh-pages": "^1.1.0",
     "lodash.isarray": "^4.0.0",
     "lodash.uniqwith": "^4.5.0",
